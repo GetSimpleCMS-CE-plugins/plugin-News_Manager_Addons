@@ -10,9 +10,10 @@ Minimum requirements:
  
 Sidebar functions/template tags:
 
- - **nm_list_recent_with_date**   
+ - **nm_list_recent_with_date($dateformat, $before=false)**   
     Usage (examples):    
     `<?php nm_list_recent_with_date(); ?>`    
     `<?php nm_list_recent_with_date(' - %d/%m/%Y'); ?>`
+    `<?php nm_list_recent_with_date('%d/%m/%Y - ', true); ?> // date before the title`   
 
  
