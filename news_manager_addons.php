@@ -5,7 +5,7 @@ $thisfile = basename(__FILE__, ".php");
 register_plugin(
 	$thisfile,
 	'News Manager Addons',
-	'0.2 beta',
+	'0.3 beta',
 	'Carlos Navarro',
 	'http://www.cyberiada.org/cnb/',
 	'Additional functions/template tags for News Manager'
@@ -94,4 +94,20 @@ function nm_custom_display_recent($templ = '') {
 function nm_set_custom_date($fmt = '%Y-%m-%d') {
   global $NMCUSTOMDATE;
   $NMCUSTOMDATE = $fmt;
+}
+
+/*******************************************************
+ * @function nm_set_custom_excerpt
+ */
+function nm_set_custom_excerpt($len = 150) {
+  global $NMEXCERPTLENGTH;
+  $NMEXCERPTLENGTH = $len;
+}
+
+/*******************************************************
+ * @function nm_set_custom_maxposts
+ */
+function nm_set_custom_maxposts($max = 5) {
+  global $NMRECENTPOSTS;
+  $NMRECENTPOSTS = $max;
 }
