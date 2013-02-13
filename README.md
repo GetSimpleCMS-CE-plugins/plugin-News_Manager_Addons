@@ -19,6 +19,12 @@ Sidebar functions/template tags:
  - **nm_set_custom_date($dateformat)**     
    ...    
 
+ - **nm_set_custom_excerpt($excerptlength)**     
+   ...    
+
+ - **nm_set_custom_maxposts($maxposts)**     
+   ...    
+
  - **nm_list_recent_with_date($dateformat, $before=false)**   
     Usage (examples):    
     `<?php nm_list_recent_with_date(); ?>`    
