@@ -7,28 +7,26 @@ Minimum requirements:
  - PHP 5.2.x
  - GetSimple CMS 3.0+
  - News Manager 2.2.4+
- 
+
+Installation, usage, etc:    
+<http://www.cyberiada.org/cnb/news-manager-addons-plugin/>
+
+Support forum:    
+<http://get-simple.info/forums/showthread.php?tid=4339>
+
 Sidebar functions/template tags:
 
- - **nm_custom_list_recent($template)**    
-   ...
- 
- - **nm_custom_display_recent($template)**    
-   ...
+ - nm_custom_list_recent($template) 
+ - nm_custom_display_recent($template) 
+ - nm_set_custom_date($dateformat) 
+ - nm_set_custom_excerpt($excerptlength) 
+ - nm_set_custom_maxposts($maxposts)
+ - nm_list_recent_with_date($dateformat, $before=false)
 
- - **nm_set_custom_date($dateformat)**     
-   ...    
-
- - **nm_set_custom_excerpt($excerptlength)**     
-   ...    
-
- - **nm_set_custom_maxposts($maxposts)**     
-   ...    
-
- - **nm_list_recent_with_date($dateformat, $before=false)**   
-    Usage (examples):    
-    `<?php nm_list_recent_with_date(); ?>`    
-    `<?php nm_list_recent_with_date(' - %d/%m/%Y'); ?>`
-    `<?php nm_list_recent_with_date('%d/%m/%Y - ', true); ?> // date before the title`   
- 
-
+$template is a string (HTML code) where these tokens can be used:
+ - {{ post_link }} - absolute URL of post
+ - {{ post_title }} - post title
+ - {{ post_date }} - post date/time
+ - {{ post_excerpt }} - post excerpt
+ - {{ post_slug }} - post id
+ - {{ post_count }} - number of post as displayed (1 = first)
