@@ -56,11 +56,11 @@ function nm_custom_display_recent($templ = '') {
   $posts = nm_get_posts();
   if (!empty($posts)) {
     if (strpos($templ, '{{ post_date }}') !== false) {
-	  global $NMCUSTOMDATE;
-	  $fmt = $NMCUSTOMDATE ? $NMCUSTOMDATE : i18n_r('news_manager/DATE_FORMAT');
-	} else {
-	  $fmt = false;
-	} 
+      global $NMCUSTOMDATE;
+      $fmt = $NMCUSTOMDATE ? $NMCUSTOMDATE : i18n_r('news_manager/DATE_FORMAT');
+    } else {
+      $fmt = false;
+    } 
     $count = 0;
     $posts = array_slice($posts, 0, $NMRECENTPOSTS, true);
     foreach ($posts as $post) {
@@ -70,14 +70,14 @@ function nm_custom_display_recent($templ = '') {
       $str = str_replace('{{ post_link }}', nm_get_url('post').$post->slug, $str);
       $str = str_replace('{{ post_title }}', stripslashes($post->title), $str);
       if ($fmt) {
-		$date = nm_get_date($fmt, strtotime($post->date));
-		$str = str_replace('{{ post_date }}', $date, $str);
-	  }
-	  if (strpos($str, '{{ post_excerpt }}') !== false) {
-	    $postxml = getXML(NMPOSTPATH.$post->slug.'.xml');
-		$excerpt = nm_create_excerpt(strip_decode($postxml->content));
-		$str = str_replace('{{ post_excerpt }}', $excerpt, $str);
-	  }
+        $date = nm_get_date($fmt, strtotime($post->date));
+        $str = str_replace('{{ post_date }}', $date, $str);
+      }
+      if (strpos($str, '{{ post_excerpt }}') !== false) {
+        $postxml = getXML(NMPOSTPATH.$post->slug.'.xml');
+        $excerpt = nm_create_excerpt(strip_decode($postxml->content));
+        $str = str_replace('{{ post_excerpt }}', $excerpt, $str);
+      }
       echo $str;
       $count++;
     }
