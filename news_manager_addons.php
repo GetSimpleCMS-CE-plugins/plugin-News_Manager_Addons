@@ -1,6 +1,14 @@
 <?php
+/*
 
-// register plugin
+News Manager Addons plugin
+
+https://github.com/cnb/News_Manager_Addons-getsimplecms/
+http://www.cyberiada.org/cnb/news-manager-addons-plugin/
+
+*/
+
+# register plugin
 $thisfile = basename(__FILE__, ".php");
 register_plugin(
 	$thisfile,
@@ -11,12 +19,6 @@ register_plugin(
 	'Additional functions/template tags for News Manager'
 );
 
-/*******************************************************
- * @function nm_list_recent_with_date
- * @action print a list with the latest posts (titles and dates)
- * @param $fmt date format (strftime)
- * @param $before show date before (true) or after (false, default) the post title
- */
 function nm_list_recent_with_date($fmt='', $before=false) {
   global $NMRECENTPOSTS;
   if ($fmt == '') $fmt = i18n_r('news_manager/DATE_FORMAT');
@@ -38,9 +40,6 @@ function nm_list_recent_with_date($fmt='', $before=false) {
   }
 }
 
-/*******************************************************
- * @function nm_custom_list_recent
- */
 function nm_custom_list_recent($templ = '') {
   if ($templ == '') $templ = '<a href="{{ post_link }}">{{ post_title }}</a>';
   echo '<ul>',PHP_EOL;
@@ -48,9 +47,6 @@ function nm_custom_list_recent($templ = '') {
   echo '</ul>',PHP_EOL;
 }
 
-/*******************************************************
- * @function nm_custom_display_recent
- */
 function nm_custom_display_recent($templ = '') {
   global $NMRECENTPOSTS;
   if ($templ == '') $templ = '<p><a href="{{ post_link }}">{{ post_title }}</a> {{ post_date }}</p>'.PHP_EOL;
@@ -88,25 +84,16 @@ function nm_custom_display_recent($templ = '') {
   }
 }
 
-/*******************************************************
- * @function nm_set_custom_date
- */
 function nm_set_custom_date($fmt = '%Y-%m-%d') {
   global $NMCUSTOMDATE;
   $NMCUSTOMDATE = $fmt;
 }
 
-/*******************************************************
- * @function nm_set_custom_excerpt
- */
 function nm_set_custom_excerpt($len = 150) {
   global $NMEXCERPTLENGTH;
   $NMEXCERPTLENGTH = $len;
 }
 
-/*******************************************************
- * @function nm_set_custom_maxposts
- */
 function nm_set_custom_maxposts($max = 5) {
   global $NMRECENTPOSTS;
   $NMRECENTPOSTS = $max;
