@@ -13,31 +13,20 @@ $thisfile = basename(__FILE__, ".php");
 register_plugin(
 	$thisfile,
 	'News Manager Addons',
-	'0.3 beta',
+	'0.3.1 beta',
 	'Carlos Navarro',
 	'http://www.cyberiada.org/cnb/',
 	'Additional functions/template tags for News Manager'
 );
 
 function nm_list_recent_with_date($fmt='', $before=false) {
-  global $NMRECENTPOSTS;
-  if ($fmt == '') $fmt = i18n_r('news_manager/DATE_FORMAT');
-  $posts = nm_get_posts();
-  if (!empty($posts)) {
-    echo '<ul>';
-    $posts = array_slice($posts, 0, $NMRECENTPOSTS, true);
-    foreach ($posts as $post) {
-      $url = nm_get_url('post').$post->slug;
-      $title = stripslashes($post->title);
-      $date = nm_get_date($fmt, strtotime($post->date));
-      if ($before) {
-        echo '<li>',$date,' <a href="',$url,'">',$title,'</a></li>';
-      } else {
-        echo '<li><a href="',$url,'">',$title,'</a> ',$date,'</li>';
-      }
-    }
-    echo '</ul>';
+  nm_set_custom_date($fmt);
+  if ($before) {
+    $templ = '{{ post_date }} <a href="{{ post_link }}">{{ post_title }}</a>';
+  } else {
+    $templ = '<a href="{{ post_link }}">{{ post_title }}</a> {{ post_date }}';
   }
+  nm_custom_list_recent($templ);
 }
 
 function nm_custom_list_recent($templ = '') {
