@@ -13,7 +13,7 @@ $thisfile = basename(__FILE__, ".php");
 register_plugin(
 	$thisfile,
 	'News Manager Addons',
-	'0.3.1 beta',
+	'0.3.2 beta',
 	'Carlos Navarro',
 	'http://www.cyberiada.org/cnb/',
 	'Additional functions/template tags for News Manager'
@@ -31,7 +31,7 @@ function nm_list_recent_with_date($fmt='', $before=false) {
 
 function nm_custom_list_recent($templ = '') {
   if ($templ == '') $templ = '<a href="{{ post_link }}">{{ post_title }}</a>';
-  echo '<ul>',PHP_EOL;
+  echo '<ul class="nm_recent">',PHP_EOL;
   nm_custom_display_recent('<li>'.$templ.'</li>'.PHP_EOL);
   echo '</ul>',PHP_EOL;
 }
