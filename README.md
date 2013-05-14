@@ -29,4 +29,4 @@ $template is a string (HTML code) where these tokens can be used:
  - {{ post_date }} - post date/time
  - {{ post_excerpt }} - post excerpt
  - {{ post_slug }} - post id
- - {{ post_count }} - number of post as displayed (1 = first)
+ - {{ post_number }} - number of post as displayed (1 = first)
