@@ -13,7 +13,7 @@ $thisfile = basename(__FILE__, ".php");
 register_plugin(
 	$thisfile,
 	'News Manager Addons',
-	'0.3.2 beta',
+	'0.3.3 beta',
 	'Carlos Navarro',
 	'http://www.cyberiada.org/cnb/',
 	'Additional functions/template tags for News Manager'
@@ -40,7 +40,8 @@ function nm_custom_display_recent($templ = '') {
   global $NMRECENTPOSTS;
   if ($templ == '') $templ = '<p><a href="{{ post_link }}">{{ post_title }}</a> {{ post_date }}</p>'.PHP_EOL;
   foreach(array('post_link','post_slug','post_title','post_date','post_excerpt','post_number') as $token) {
-    str_replace('{{'.$token.'}}', '{{ '.$token.' }}', $templ);
+    if (strpos($templ, '{{'.$token.'}}'))
+      $templ = str_replace('{{'.$token.'}}', '{{ '.$token.' }}', $templ);
   }
   $posts = nm_get_posts();
   if (!empty($posts)) {
