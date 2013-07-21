@@ -22,6 +22,8 @@ Sidebar functions/template tags:
  - nm_set_custom_excerpt($excerptlength) 
  - nm_set_custom_maxposts($maxposts)
  - nm_list_recent_with_date($dateformat, $before=false)
+ - nm_list_recent_by_tag($tag, $maxposts)
+ - nm_search_with_placeholder($placeholder)
 
 $template is a string (HTML code) where these tokens can be used:
  - {{ post_link }} - absolute URL of post
