@@ -13,12 +13,27 @@ $thisfile = basename(__FILE__, ".php");
 register_plugin(
 	$thisfile,
 	'News Manager Addons',
-	'0.5 beta',
+	'0.6 beta',
 	'Carlos Navarro',
 	'http://www.cyberiada.org/cnb/',
 	'Additional functions/template tags for News Manager'
 );
 
+function nm_search_with_placeholder($placeholder='') {
+  global $i18n;
+  if (!$placeholder)
+    $placeholder = (isset($i18n['news_manager/SEARCH_PLACEHOLDER'])) ? $i18n['news_manager/SEARCH_PLACEHOLDER'] : $i18n['news_manager/SEARCH'].' ...';
+  $placeholder = htmlspecialchars($placeholder);
+  $url = nm_get_url();
+  ?>
+  <form id="search" action="<?php echo $url; ?>" method="post">
+    <input type="text" class="text" name="keywords" value="<?php echo $placeholder; ?>" onfocus="if (this.value=='<?php echo $placeholder; ?>') {this.value=''}" onblur="if (this.value=='') {this.value='<?php echo $placeholder; ?>'}"/>
+    <!--[if IE]><input type="text" style="display: none;" disabled="disabled"
+    size="20" value="Ignore field. IE bug fix" /><![endif]-->
+    <input type="submit" class="submit" name="search" value="<?php i18n('news_manager/SEARCH'); ?>" />
+  </form>
+  <?php
+}
 
 if(!function_exists('nm_list_recent_by_tag')) {
   function nm_list_recent_by_tag($tag='', $max=0) {
