@@ -13,7 +13,7 @@ $thisfile = basename(__FILE__, ".php");
 register_plugin(
 	$thisfile,
 	'News Manager Addons',
-	'0.6 beta',
+	'0.7 beta',
 	'Carlos Navarro',
 	'http://www.cyberiada.org/cnb/',
 	'Additional functions/template tags for News Manager'
@@ -72,21 +72,30 @@ function nm_list_recent_with_date($fmt='', $before=false) {
   nm_custom_list_recent($templ);
 }
 
-function nm_custom_list_recent($templ = '') {
+function nm_custom_list_recent($templ='', $tag='') {
   if ($templ == '') $templ = '<a href="{{ post_link }}">{{ post_title }}</a>';
   echo '<ul class="nm_recent">',PHP_EOL;
-  nm_custom_display_recent('<li>'.$templ.'</li>'.PHP_EOL);
+  nm_custom_display_recent('<li>'.$templ.'</li>'.PHP_EOL, $tag);
   echo '</ul>',PHP_EOL;
 }
 
-function nm_custom_display_recent($templ = '') {
+function nm_custom_display_recent($templ='', $tag='') {
   global $NMRECENTPOSTS, $NMIMAGES, $NMCUSTOMIMAGES;
   if ($templ == '') $templ = '<p><a href="{{ post_link }}">{{ post_title }}</a> {{ post_date }}</p>'.PHP_EOL;
   foreach(array('post_link','post_slug','post_title','post_date','post_excerpt','post_number','post_image','post_image_url') as $token) {
     if (strpos($templ, '{{'.$token.'}}'))
       $templ = str_replace('{{'.$token.'}}', '{{ '.$token.' }}', $templ);
   }
-  $posts = nm_get_posts();
+  if (trim($tag) !== '') {
+    $allposts = nm_get_posts();
+    $posts = array();
+    foreach ($allposts as $post)
+      if (in_array($tag, explode(',', $post->tags)))
+        $posts[] = $post;
+    unset($allposts);
+  } else {
+    $posts = nm_get_posts();
+  }
   if (!empty($posts)) {
     if (strpos($templ, '{{ post_date }}') !== false) {
       global $NMCUSTOMDATE;
