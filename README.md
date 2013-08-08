@@ -16,8 +16,10 @@ Support forum:
 
 Sidebar functions/template tags:
 
- - nm_custom_list_recent($template) 
- - nm_custom_display_recent($template) 
+ - nm_custom_list_recent($template, $tag='') 
+ - nm_custom_display_recent($template, $tag='') 
+ - nm_custom_list_future($template, $tag='') 
+ - nm_custom_display_future($template, $tag='') 
  - nm_set_custom_date($dateformat) 
  - nm_set_custom_excerpt($excerptlength) 
  - nm_set_custom_maxposts($maxposts)
@@ -30,5 +32,6 @@ $template is a string (HTML code) where these tokens can be used:
  - {{ post_title }} - post title
  - {{ post_date }} - post date/time
  - {{ post_excerpt }} - post excerpt
+ - {{ post_content }} - post content
  - {{ post_slug }} - post id
  - {{ post_number }} - number of post as displayed (1 = first)
