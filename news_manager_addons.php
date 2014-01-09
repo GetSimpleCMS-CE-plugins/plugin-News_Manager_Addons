@@ -13,7 +13,7 @@ $thisfile = basename(__FILE__, ".php");
 register_plugin(
 	$thisfile,
 	'News Manager Addons',
-	'0.8.2 beta',
+	'0.8.3 beta',
 	'Carlos Navarro',
 	'http://www.cyberiada.org/cnb/',
 	'Additional functions/template tags for News Manager'
@@ -93,7 +93,7 @@ function nm_custom_display_future($templ='', $tag='') {
 }
 
 function nm_custom_display_posts($templ='', $tag='', $type='') {
-  global $NMRECENTPOSTS, $NMIMAGES, $NMCUSTOMIMAGES;
+  global $NMRECENTPOSTS, $NMCUSTOMIMAGES;
   if ($templ == '') $templ = '<p><a href="{{ post_link }}">{{ post_title }}</a> {{ post_date }}</p>'.PHP_EOL;
   foreach(array('post_link','post_slug','post_title','post_date','post_excerpt','post_content','post_number','post_image','post_image_url') as $token) {
     if (strpos($templ, '{{'.$token.'}}'))
@@ -127,10 +127,10 @@ function nm_custom_display_posts($templ='', $tag='', $type='') {
     } else {
       $fmt = false;
     }
-    if ($NMCUSTOMIMAGES) {
-      $NMIMAGES_orig = $NMIMAGES;
-      $NMIMAGES = array_merge($NMIMAGES_orig, $NMCUSTOMIMAGES);
-    }
+    $w = isset($NMCUSTOMIMAGES['width']) ? $NMCUSTOMIMAGES['width'] : 0;
+    $h = isset($NMCUSTOMIMAGES['height']) ? $NMCUSTOMIMAGES['height'] : 0;
+    $c = isset($NMCUSTOMIMAGES['crop']) ? $NMCUSTOMIMAGES['crop'] : 0;
+    $d = isset($NMCUSTOMIMAGES['default']) ? $NMCUSTOMIMAGES['default'] : '';
     $count = 0;
     $posts = array_slice($posts, 0, $NMRECENTPOSTS, true);
     foreach ($posts as $post) {
@@ -141,8 +141,8 @@ function nm_custom_display_posts($templ='', $tag='', $type='') {
       $str = str_replace('{{ post_title }}', stripslashes($post->title), $str);
       if (strpos($str, '{{ post_image') !== false && function_exists('nm_get_image_url')) {
         $img = (string)$post->image;
-        $str = str_replace('{{ post_image_url }}', htmlspecialchars(nm_get_image_url($img)), $str);
-        $str = str_replace('{{ post_image }}', '<img src="'.htmlspecialchars(nm_get_image_url($img)).'" />', $str);
+        $str = str_replace('{{ post_image_url }}', htmlspecialchars(nm_get_image_url($img,$w,$h,$c,$d)), $str);
+        $str = str_replace('{{ post_image }}', '<img src="'.htmlspecialchars(nm_get_image_url($img,$w,$h,$c,$d)).'" />', $str);
       }
       if ($fmt) {
         $date = nm_get_date($fmt, strtotime($post->date));
@@ -160,7 +160,6 @@ function nm_custom_display_posts($templ='', $tag='', $type='') {
       echo $str;
       $count++;
     }
-    if ($NMCUSTOMIMAGES) $NMIMAGES = $NMIMAGES_orig;
   }
 }
 
