@@ -13,7 +13,7 @@ $thisfile = basename(__FILE__, ".php");
 register_plugin(
 	$thisfile,
 	'News Manager Addons',
-	'0.8.3 beta',
+	'0.9.0 beta',
 	'Carlos Navarro',
 	'http://www.cyberiada.org/cnb/',
 	'Additional functions/template tags for News Manager'
@@ -93,7 +93,7 @@ function nm_custom_display_future($templ='', $tag='') {
 }
 
 function nm_custom_display_posts($templ='', $tag='', $type='') {
-  global $NMRECENTPOSTS, $NMCUSTOMIMAGES;
+  global $NMRECENTPOSTS, $NMCUSTOMIMAGES, $NMCUSTOMOFFSET;
   if ($templ == '') $templ = '<p><a href="{{ post_link }}">{{ post_title }}</a> {{ post_date }}</p>'.PHP_EOL;
   foreach(array('post_link','post_slug','post_title','post_date','post_excerpt','post_content','post_number','post_image','post_image_url') as $token) {
     if (strpos($templ, '{{'.$token.'}}'))
@@ -132,7 +132,8 @@ function nm_custom_display_posts($templ='', $tag='', $type='') {
     $c = isset($NMCUSTOMIMAGES['crop']) ? $NMCUSTOMIMAGES['crop'] : 0;
     $d = isset($NMCUSTOMIMAGES['default']) ? $NMCUSTOMIMAGES['default'] : '';
     $count = 0;
-    $posts = array_slice($posts, 0, $NMRECENTPOSTS, true);
+    $offset = $NMCUSTOMOFFSET ? intval($NMCUSTOMOFFSET) : 0;
+    $posts = array_slice($posts, $offset, $NMRECENTPOSTS, true);
     foreach ($posts as $post) {
       $str = $templ;
       $str = str_replace('{{ post_number }}', strval($count), $str);
@@ -176,6 +177,11 @@ function nm_set_custom_excerpt($len = 150) {
 function nm_set_custom_maxposts($max = 5) {
   global $NMRECENTPOSTS;
   $NMRECENTPOSTS = $max;
+}
+
+function nm_set_custom_offset($offset = 0) {
+  global $NMCUSTOMOFFSET;
+  $NMCUSTOMOFFSET = $offset;
 }
 
 function nm_set_custom_image($width=null, $height=null, $crop=null, $default=null) {
