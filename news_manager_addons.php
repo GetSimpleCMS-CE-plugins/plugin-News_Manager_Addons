@@ -13,7 +13,7 @@ $thisfile = basename(__FILE__, ".php");
 register_plugin(
 	$thisfile,
 	'News Manager Addons',
-	'0.9.0.1 beta',
+	'0.9.0.2 beta',
 	'Carlos Navarro',
 	'http://www.cyberiada.org/cnb/',
 	'Additional functions/template tags for News Manager'
@@ -141,9 +141,12 @@ function nm_custom_display_posts($templ='', $tag='', $type='') {
       $str = str_replace('{{ post_link }}', nm_get_url('post').$post->slug, $str);
       $str = str_replace('{{ post_title }}', stripslashes($post->title), $str);
       if (strpos($str, '{{ post_image') !== false && function_exists('nm_get_image_url')) {
-        $img = (string)$post->image;
-        $str = str_replace('{{ post_image_url }}', htmlspecialchars(nm_get_image_url($img,$w,$h,$c,$d)), $str);
-        $str = str_replace('{{ post_image }}', '<img src="'.htmlspecialchars(nm_get_image_url($img,$w,$h,$c,$d)).'" alt="" />', $str);
+        $img = htmlspecialchars(nm_get_image_url((string)$post->image,$w,$h,$c,$d));
+        $str = str_replace('{{ post_image_url }}', $img , $str);
+        if (!empty($img))
+          $str = str_replace('{{ post_image }}', '<img src="'.$img.'" alt="" />', $str);
+        else
+          $str = str_replace('{{ post_image }}', '', $str);
       }
       if ($fmt) {
         $date = nm_get_date($fmt, strtotime($post->date));
