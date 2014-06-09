@@ -13,7 +13,7 @@ $thisfile = basename(__FILE__, ".php");
 register_plugin(
 	$thisfile,
 	'News Manager Addons',
-	'0.9.0.2 beta',
+	'0.9.0.3',
 	'Carlos Navarro',
 	'http://www.cyberiada.org/cnb/',
 	'Additional functions/template tags for News Manager'
@@ -121,6 +121,7 @@ function nm_custom_display_posts($templ='', $tag='', $type='') {
   unset($allposts);
   
   if (!empty($posts)) {
+    ob_start(); // content filter
     if (strpos($templ, '{{ post_date }}') !== false) {
       global $NMCUSTOMDATE;
       $fmt = $NMCUSTOMDATE ? $NMCUSTOMDATE : i18n_r('news_manager/DATE_FORMAT');
@@ -164,6 +165,9 @@ function nm_custom_display_posts($templ='', $tag='', $type='') {
       echo $str;
       $count++;
     }
+    $output = ob_get_contents();
+    ob_end_clean();
+    echo exec_filter('content', $output); // content filter
   }
 }
 
