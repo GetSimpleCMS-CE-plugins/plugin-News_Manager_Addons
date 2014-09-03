@@ -13,7 +13,7 @@ $thisfile = basename(__FILE__, ".php");
 register_plugin(
 	$thisfile,
 	'News Manager Addons',
-	'0.9.0.3',
+	'0.9.1',
 	'Carlos Navarro',
 	'http://www.cyberiada.org/cnb/',
 	'Additional functions/template tags for News Manager'
@@ -95,7 +95,7 @@ function nm_custom_display_future($templ='', $tag='') {
 function nm_custom_display_posts($templ='', $tag='', $type='') {
   global $NMRECENTPOSTS, $NMCUSTOMIMAGES, $NMCUSTOMOFFSET;
   if ($templ == '') $templ = '<p><a href="{{ post_link }}">{{ post_title }}</a> {{ post_date }}</p>'.PHP_EOL;
-  foreach(array('post_link','post_slug','post_title','post_date','post_excerpt','post_content','post_number','post_image','post_image_url') as $token) {
+  foreach(array('post_link','post_slug','post_title','post_date','post_excerpt','post_content','post_number','post_image','post_image_url','post_author') as $token) {
     if (strpos($templ, '{{'.$token.'}}'))
       $templ = str_replace('{{'.$token.'}}', '{{ '.$token.' }}', $templ);
   }
@@ -152,6 +152,22 @@ function nm_custom_display_posts($templ='', $tag='', $type='') {
       if ($fmt) {
         $date = nm_get_date($fmt, strtotime($post->date));
         $str = str_replace('{{ post_date }}', $date, $str);
+      }
+      if (strpos($str, '{{ post_author }}') !== false) {
+        if (isset($post->author)) {
+          $author = strval($post->author);
+          global $NMAUTHOR; // NM Custom Authors (array)
+          if ($NMAUTHOR && isset($NMAUTHOR[$author]))
+            $author = $NMAUTHOR[$author];
+        } else {
+          if (function_exists('nm_get_option')) {
+            $author = nm_get_option('defaultauthor'); // NM 3.0+ custom setting
+            if (!$author) $author = '';
+          } else {
+            $author = '';
+          }
+        }
+        $str = str_replace('{{ post_author }}', $author, $str);
       }
       if (strpos($str, '{{ post_excerpt }}') !== false || strpos($str, '{{ post_content }}') !== false) {
         $postxml = getXML(NMPOSTPATH.$post->slug.'.xml');
