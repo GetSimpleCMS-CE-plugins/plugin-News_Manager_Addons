@@ -13,7 +13,7 @@ $thisfile = basename(__FILE__, ".php");
 register_plugin(
 	$thisfile,
 	'News Manager Addons',
-	'0.9.1.1',
+	'0.9.2',
 	'Carlos Navarro',
 	'http://www.cyberiada.org/cnb/',
 	'Additional functions/template tags for News Manager'
@@ -172,7 +172,10 @@ function nm_custom_display_posts($templ='', $tag='', $type='') {
       if (strpos($str, '{{ post_excerpt }}') !== false || strpos($str, '{{ post_content }}') !== false) {
         $postxml = getXML(NMPOSTPATH.$post->slug.'.xml');
         if (strpos($str, '{{ post_excerpt }}') !== false) {
-          $excerpt = nm_create_excerpt(strip_decode($postxml->content));
+          if (function_exists('nm_make_excerpt1'))
+            $excerpt = nm_make_excerpt(strip_decode($postxml->content));
+          else // NM < 3.0 - remove <p>, </p>
+            $excerpt = substr(nm_create_excerpt(strip_decode($postxml->content)), 3, -4);
           $str = str_replace('{{ post_excerpt }}', $excerpt, $str);
         } else {
           $str = str_replace('{{ post_content }}', strip_decode($postxml->content), $str);
