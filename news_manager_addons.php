@@ -13,7 +13,7 @@ $thisfile = basename(__FILE__, ".php");
 register_plugin(
 	$thisfile,
 	'News Manager Addons',
-	'0.9.2.1',
+	'0.9.3',
 	'Carlos Navarro',
 	'http://www.cyberiada.org/cnb/',
 	'Additional functions/template tags for News Manager'
@@ -128,10 +128,13 @@ function nm_custom_display_posts($templ='', $tag='', $type='') {
     } else {
       $fmt = false;
     }
-    $w = isset($NMCUSTOMIMAGES['width']) ? $NMCUSTOMIMAGES['width'] : 0;
-    $h = isset($NMCUSTOMIMAGES['height']) ? $NMCUSTOMIMAGES['height'] : 0;
-    $c = isset($NMCUSTOMIMAGES['crop']) ? $NMCUSTOMIMAGES['crop'] : 0;
-    $d = isset($NMCUSTOMIMAGES['default']) ? $NMCUSTOMIMAGES['default'] : '';
+    $images = (strpos($templ, '{{ post_image') !== false && function_exists('nm_get_option'));
+    if ($images) {
+      $w = isset($NMCUSTOMIMAGES['width']) ? $NMCUSTOMIMAGES['width'] : nm_get_option('imagewidth',0);
+      $h = isset($NMCUSTOMIMAGES['height']) ? $NMCUSTOMIMAGES['height'] : nm_get_option('imageheight',0);
+      $c = isset($NMCUSTOMIMAGES['crop']) ? $NMCUSTOMIMAGES['crop'] : nm_get_option('imagecrop',0);
+      $d = isset($NMCUSTOMIMAGES['default']) ? $NMCUSTOMIMAGES['default'] : nm_get_option('imagedefault','');
+    }
     $count = 0;
     $offset = $NMCUSTOMOFFSET ? intval($NMCUSTOMOFFSET) : 0;
     $posts = array_slice($posts, $offset, $NMRECENTPOSTS, true);
@@ -141,7 +144,7 @@ function nm_custom_display_posts($templ='', $tag='', $type='') {
       $str = str_replace('{{ post_slug }}', $post->slug, $str);
       $str = str_replace('{{ post_link }}', nm_get_url('post').$post->slug, $str);
       $str = str_replace('{{ post_title }}', stripslashes($post->title), $str);
-      if (strpos($str, '{{ post_image') !== false && function_exists('nm_get_image_url')) {
+      if ($images) {
         $img = htmlspecialchars(nm_get_image_url((string)$post->image,$w,$h,$c,$d));
         $str = str_replace('{{ post_image_url }}', $img , $str);
         if (!empty($img))
@@ -213,8 +216,8 @@ function nm_set_custom_offset($offset = 0) {
 function nm_set_custom_image($width=null, $height=null, $crop=null, $default=null) {
   global $NMCUSTOMIMAGES;
   $NMCUSTOMIMAGES = array();
-  if ($width) $NMCUSTOMIMAGES['width'] = $width;
-  if ($height) $NMCUSTOMIMAGES['height'] = $height;
-  if ($crop) $NMCUSTOMIMAGES['crop'] = $crop;
-  if ($default) $NMCUSTOMIMAGES['default'] = $default;
+  if ($width !== null) $NMCUSTOMIMAGES['width'] = $width;
+  if ($height !== null) $NMCUSTOMIMAGES['height'] = $height;
+  if ($crop !== null) $NMCUSTOMIMAGES['crop'] = $crop;
+  if ($default !== null) $NMCUSTOMIMAGES['default'] = $default;
 }
