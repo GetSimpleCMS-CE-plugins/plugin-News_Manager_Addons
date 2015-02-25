@@ -13,7 +13,7 @@ $thisfile = basename(__FILE__, ".php");
 register_plugin(
 	$thisfile,
 	'News Manager Addons',
-	'0.9.3',
+	'0.9.3.1',
 	'Carlos Navarro',
 	'http://www.cyberiada.org/cnb/',
 	'Additional functions/template tags for News Manager'
@@ -93,7 +93,7 @@ function nm_custom_display_future($templ='', $tag='') {
 }
 
 function nm_custom_display_posts($templ='', $tag='', $type='') {
-  global $NMRECENTPOSTS, $NMCUSTOMIMAGES, $NMCUSTOMOFFSET;
+  global $NMRECENTPOSTS, $NMCUSTOMIMAGES, $NMCUSTOMOFFSET, $NMEXCERPTLENGTH;
   if ($templ == '') $templ = '<p><a href="{{ post_link }}">{{ post_title }}</a> {{ post_date }}</p>'.PHP_EOL;
   foreach(array('post_link','post_slug','post_title','post_date','post_excerpt','post_content','post_number','post_image','post_image_url','post_author') as $token) {
     if (strpos($templ, '{{'.$token.'}}'))
@@ -176,7 +176,7 @@ function nm_custom_display_posts($templ='', $tag='', $type='') {
         $postxml = getXML(NMPOSTPATH.$post->slug.'.xml');
         if (strpos($str, '{{ post_excerpt }}') !== false) {
           if (function_exists('nm_make_excerpt'))
-            $excerpt = nm_make_excerpt(strip_decode($postxml->content));
+            $excerpt = nm_make_excerpt(strip_decode($postxml->content), $NMEXCERPTLENGTH);
           else // NM < 3.0 - remove <p>, </p>
             $excerpt = substr(nm_create_excerpt(strip_decode($postxml->content)), 3, -4);
           $str = str_replace('{{ post_excerpt }}', $excerpt, $str);
