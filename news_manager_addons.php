@@ -13,7 +13,7 @@ $thisfile = basename(__FILE__, ".php");
 register_plugin(
 	$thisfile,
 	'News Manager Addons',
-	'0.9.3.1',
+	'0.9.3.2',
 	'Carlos Navarro',
 	'http://www.cyberiada.org/cnb/',
 	'Additional functions/template tags for News Manager'
@@ -159,9 +159,13 @@ function nm_custom_display_posts($templ='', $tag='', $type='') {
       if (strpos($str, '{{ post_author }}') !== false) {
         if (isset($post->author)) {
           $author = strval($post->author);
-          global $NMAUTHOR; // NM Custom Authors (array)
-          if ($NMAUTHOR && isset($NMAUTHOR[$author]))
-            $author = $NMAUTHOR[$author];
+          if (function_exists('nm_get_author_name_html')) {
+            $author = nm_get_author_name_html($author); // NM 3.2+
+          } else {
+            global $NMAUTHOR; // NM Custom Authors (array) or NM 3.1
+            if ($NMAUTHOR && isset($NMAUTHOR[$author]))
+              $author = $NMAUTHOR[$author];
+          }
         } else {
           if (function_exists('nm_get_option')) {
             $author = nm_get_option('defaultauthor'); // NM 3.0+ custom setting
