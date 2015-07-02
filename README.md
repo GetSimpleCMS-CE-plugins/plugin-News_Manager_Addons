@@ -35,6 +35,6 @@ $template is a string (HTML code) where these tokens can be used:
  - {{ post_excerpt }} - post excerpt
  - {{ post_content }} - post content
  - {{ post_slug }} - post id
- - {{ post_number }} - number of post as displayed (1 = first)
+ - {{ post_number }} - number of post as displayed (0, 1, 2, ...)
  - {{ post_image }} - `<img ...>` tag for the post image (News Manager 3.0+)
  - {{ post_image_url }} - post image URL (News Manager 3.0+)
