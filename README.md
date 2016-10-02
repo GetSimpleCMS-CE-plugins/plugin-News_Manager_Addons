@@ -22,6 +22,7 @@ Sidebar functions/template tags:
  - nm_custom_display_future($template, $tag='') 
  - nm_set_custom_date($dateformat) 
  - nm_set_custom_excerpt($excerptlength) 
+ - nm_set_custom_title_excerpt($excerptlength, $ellipsis) 
  - nm_set_custom_maxposts($maxposts)
  - nm_set_custom_offset($offset)
  - nm_list_recent_with_date($dateformat, $before=false)
@@ -31,8 +32,9 @@ Sidebar functions/template tags:
 $template is a string (HTML code) where these tokens can be used:
  - {{ post_link }} - absolute URL of post
  - {{ post_title }} - post title
+ - {{ post_title_excerpt }} - post title excerpt (News Manager 3.0+)
  - {{ post_date }} - post date/time
- - {{ post_excerpt }} - post excerpt
+ - {{ post_excerpt }} - post content excerpt
  - {{ post_content }} - post content
  - {{ post_slug }} - post id
  - {{ post_number }} - number of post as displayed (0, 1, 2, ...)

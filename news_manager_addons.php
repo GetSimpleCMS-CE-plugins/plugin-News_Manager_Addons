@@ -13,7 +13,7 @@ $thisfile = basename(__FILE__, ".php");
 register_plugin(
 	$thisfile,
 	'News Manager Addons',
-	'0.9.3.2',
+	'0.9.4',
 	'Carlos Navarro',
 	'http://www.cyberiada.org/cnb/',
 	'Additional functions/template tags for News Manager'
@@ -93,9 +93,9 @@ function nm_custom_display_future($templ='', $tag='') {
 }
 
 function nm_custom_display_posts($templ='', $tag='', $type='') {
-  global $NMRECENTPOSTS, $NMCUSTOMIMAGES, $NMCUSTOMOFFSET, $NMEXCERPTLENGTH;
+  global $NMRECENTPOSTS, $NMCUSTOMIMAGES, $NMCUSTOMOFFSET, $NMEXCERPTLENGTH, $NMCUSTOMTITLEEXCERPT;
   if ($templ == '') $templ = '<p><a href="{{ post_link }}">{{ post_title }}</a> {{ post_date }}</p>'.PHP_EOL;
-  foreach(array('post_link','post_slug','post_title','post_date','post_excerpt','post_content','post_number','post_image','post_image_url','post_author') as $token) {
+  foreach(array('post_link','post_slug','post_title','post_title_excerpt','post_date','post_excerpt','post_content','post_number','post_image','post_image_url','post_author') as $token) {
     if (strpos($templ, '{{'.$token.'}}'))
       $templ = str_replace('{{'.$token.'}}', '{{ '.$token.' }}', $templ);
   }
@@ -128,6 +128,14 @@ function nm_custom_display_posts($templ='', $tag='', $type='') {
     } else {
       $fmt = false;
     }
+    $breakwords = function_exists('nm_get_option') && nm_get_option('breakwords');
+    if (strpos($templ, '{{ post_title_excerpt }}') !== false && function_exists('nm_make_excerpt')) { // NM 3.0 only
+      $titleexcerpt = true;
+      $titlelength = isset($NMCUSTOMTITLEEXCERPT['length']) ? $NMCUSTOMTITLEEXCERPT['length'] : 15;
+      $titleellipsis = isset($NMCUSTOMTITLEEXCERPT['ellipsis']) ? $NMCUSTOMTITLEEXCERPT['ellipsis'] : '...';
+    } else {
+      $titleexcerpt = false;      
+    }
     $images = (strpos($templ, '{{ post_image') !== false && function_exists('nm_get_option'));
     if ($images) {
       $w = isset($NMCUSTOMIMAGES['width']) ? $NMCUSTOMIMAGES['width'] : nm_get_option('imagewidth',0);
@@ -144,6 +152,8 @@ function nm_custom_display_posts($templ='', $tag='', $type='') {
       $str = str_replace('{{ post_slug }}', $post->slug, $str);
       $str = str_replace('{{ post_link }}', nm_get_url('post').$post->slug, $str);
       $str = str_replace('{{ post_title }}', stripslashes($post->title), $str);
+      if ($titleexcerpt)
+        $str = str_replace('{{ post_title_excerpt }}', nm_make_excerpt(stripslashes($post->title), $titlelength, $titleellipsis, $breakwords), $str);
       if ($images) {
         $img = htmlspecialchars(nm_get_image_url((string)$post->image,$w,$h,$c,$d));
         $str = str_replace('{{ post_image_url }}', $img , $str);
@@ -180,7 +190,7 @@ function nm_custom_display_posts($templ='', $tag='', $type='') {
         $postxml = getXML(NMPOSTPATH.$post->slug.'.xml');
         if (strpos($str, '{{ post_excerpt }}') !== false) {
           if (function_exists('nm_make_excerpt'))
-            $excerpt = nm_make_excerpt(strip_decode($postxml->content), $NMEXCERPTLENGTH);
+            $excerpt = nm_make_excerpt(strip_decode($postxml->content), $NMEXCERPTLENGTH, '', $breakwords);
           else // NM < 3.0 - remove <p>, </p>
             $excerpt = substr(nm_create_excerpt(strip_decode($postxml->content)), 3, -4);
           $str = str_replace('{{ post_excerpt }}', $excerpt, $str);
@@ -224,4 +234,11 @@ function nm_set_custom_image($width=null, $height=null, $crop=null, $default=nul
   if ($height !== null) $NMCUSTOMIMAGES['height'] = $height;
   if ($crop !== null) $NMCUSTOMIMAGES['crop'] = $crop;
   if ($default !== null) $NMCUSTOMIMAGES['default'] = $default;
+}
+
+function nm_set_custom_title_excerpt($length = null, $ellipsis = null) {
+  global $NMCUSTOMTITLEEXCERPT;
+  $NMCUSTOMTITLEEXCERPT = array();
+  if ($length !== null) $NMCUSTOMTITLEEXCERPT['length'] = $length;
+  if ($ellipsis !== null) $NMCUSTOMTITLEEXCERPT['ellipsis'] = $ellipsis;
 }
