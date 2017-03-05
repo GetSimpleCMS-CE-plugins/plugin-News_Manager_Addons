@@ -13,7 +13,7 @@ $thisfile = basename(__FILE__, ".php");
 register_plugin(
 	$thisfile,
 	'News Manager Addons',
-	'0.9.4',
+	'0.9.5',
 	'Carlos Navarro',
 	'http://www.cyberiada.org/cnb/',
 	'Additional functions/template tags for News Manager'
@@ -84,12 +84,23 @@ function nm_custom_list_future($templ='', $tag='') {
   echo '</ul>',PHP_EOL;
 }
 
+function nm_custom_list_random($templ='', $tag='') {
+  if ($templ == '') $templ = '<a href="{{ post_link }}">{{ post_title }}</a>';
+  echo '<ul class="nm_random">',PHP_EOL;
+  nm_custom_display_posts('<li>'.$templ.'</li>'.PHP_EOL, $tag, 'random');
+  echo '</ul>',PHP_EOL;
+}
+
 function nm_custom_display_recent($templ='', $tag='') {
   nm_custom_display_posts($templ, $tag);
 }
 
 function nm_custom_display_future($templ='', $tag='') {
   nm_custom_display_posts($templ, $tag, 'future');
+}
+
+function nm_custom_display_random($templ='', $tag='') {
+  nm_custom_display_posts($templ, $tag, 'random');
 }
 
 function nm_custom_display_posts($templ='', $tag='', $type='') {
@@ -121,6 +132,7 @@ function nm_custom_display_posts($templ='', $tag='', $type='') {
   unset($allposts);
   
   if (!empty($posts)) {
+    if ($type == 'random') shuffle($posts);
     ob_start(); // content filter
     if (strpos($templ, '{{ post_date }}') !== false) {
       global $NMCUSTOMDATE;

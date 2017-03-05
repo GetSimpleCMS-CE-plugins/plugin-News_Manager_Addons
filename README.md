@@ -20,6 +20,8 @@ Sidebar functions/template tags:
  - nm_custom_display_recent($template, $tag='') 
  - nm_custom_list_future($template, $tag='') 
  - nm_custom_display_future($template, $tag='') 
+ - nm_custom_list_random($template, $tag='') 
+ - nm_custom_display_random($template, $tag='') 
  - nm_set_custom_date($dateformat) 
  - nm_set_custom_excerpt($excerptlength) 
  - nm_set_custom_title_excerpt($excerptlength, $ellipsis) 
