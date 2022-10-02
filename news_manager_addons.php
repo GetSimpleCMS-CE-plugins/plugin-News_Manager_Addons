@@ -13,7 +13,7 @@ $thisfile = basename(__FILE__, ".php");
 register_plugin(
 	$thisfile,
 	'News Manager Addons',
-	'0.9.5',
+	'0.9.5.1',
 	'Carlos Navarro',
 	'http://www.cyberiada.org/cnb/',
 	'Additional functions/template tags for News Manager'
@@ -157,7 +157,7 @@ function nm_custom_display_posts($templ='', $tag='', $type='') {
     }
     $count = 0;
     $offset = $NMCUSTOMOFFSET ? intval($NMCUSTOMOFFSET) : 0;
-    $posts = array_slice($posts, $offset, $NMRECENTPOSTS, true);
+    $posts = array_slice($posts, $offset, intval($NMRECENTPOSTS), true);
     foreach ($posts as $post) {
       $str = $templ;
       $str = str_replace('{{ post_number }}', strval($count), $str);
